@@ -41,5 +41,25 @@ def insert_driver(carnet: str, nombre_completo: str, edad: int):
             connection.close()
 
 
+def insert_taxi(chapa: str, recorrido: int, nombre_completo: str):
+    try:
+        cursor = connection.cursor()
+        cursor.execute('''SELECT driver_id FROM drivers where nombre_completo like ?''', ('%' + nombre_completo + '%',))
+        row = cursor.fetchone()
+        if row[0]:
+            sql = ''' INSERT INTO taxis(taxi_id,chapa,recorrido,driver_id) VALUES(?,?,?,?); '''
+            cursor.execute(sql, (uuid_v4(), chapa, recorrido, row[0]))
+            connection.commit()
+            print("Taxi inserted successfully into taxis table")
+            cursor.close()
+        else:
+            print('Driver not found :(')
+    except sqlite3.Error as error:
+        print(error)
+    finally:
+        if connection:
+            connection.close()
+
+
 def uuid_v4():
     return uuid.uuid4().hex
