@@ -56,12 +56,20 @@ def insert_taxi_function():
                     return insert_taxi(chapa=plate, modelo=model, km_recorrido=kilometers, driver=uuid)
 
 
+def show_drivers_function():
+    drivers = get_drivers()
+    print(color.BLUE + ' Drivers List')
+    print(color.GRAY + '-----------------------------------------------------------------')
+    for driver in drivers:
+        print(color.GREEN + 'DNI: ' + color.WHITE + driver[1] + color.GREEN + ' Full Name: ' + color.WHITE + driver[2] + ' ' + driver[3])
+
+
 def start_app():
     print(color.GRAY + '-----------------------------------------------------------------')
     print(color.GREEN + ' 1. ' + color.GRAY + 'Insert driver')
     print(color.GREEN + ' 2. ' + color.GRAY + 'Insert taxi')
     print(color.GREEN + ' 3. ' + color.GRAY + 'Show drivers')
-    print(color.GREEN + ' 4. ' + color.GRAY + 'Show tais with more than 200km')
+    print(color.GREEN + ' 4. ' + color.GRAY + 'Show taxis with more than 200km')
     print(color.GREEN + ' 5. ' + color.GRAY + 'Find taxi by driver name')
     print(color.GREEN + ' 6. ' + color.GRAY + 'Update driver name by DNI')
     print(color.GRAY + '-----------------------------------------------------------------')
@@ -87,7 +95,9 @@ def start_app():
             print(color.RED + ' ERROR: The driver must not have any taxi')
             start_app()
     elif prompt == '3':
-        print(prompt)
+        clear()
+        show_drivers_function()
+        start_app()
     elif prompt == '4':
         print(prompt)
     elif prompt == '5':
