@@ -2,24 +2,33 @@ from connection import create_tables, insert_driver, insert_taxi, show_drivers, 
     find_taxi_by_driver_name, update_driver_name_by_dni
 import os, platform
 
+
+class color:
+    RED    = '\33[91m'
+    GRAY   = '\33[90m'
+    BLUE   = '\33[94m'
+    GREEN  = '\33[92m'
+    WHITE  = '\33[97m'
+    YELLOW = '\33[93m'
+
+
 def clear():
     os_name = platform.system()
     if os_name == 'Linux':
         os.system('clear')
-        # print('Linux')
     elif os_name == 'Windows':
         os.system('cls')
-        # print('Windows')
 
 def start_app():
-    print('1. Insert driver')
-    print('2. Insert taxi')
-    print('3. Show drivers')
-    print('4. Show tais with more than 200km')
-    print('5. Find taxy by driver name')
-    print('6. Update driver name by DNI')
+    print(color.GREEN + '1. ' + color.GRAY + 'Insert driver')
+    print(color.GREEN + '2. ' + color.GRAY + 'Insert taxi')
+    print(color.GREEN + '3. ' + color.GRAY + 'Show drivers')
+    print(color.GREEN + '4. ' + color.GRAY + 'Show tais with more than 200km')
+    print(color.GREEN + '5. ' + color.GRAY + 'Find taxi by driver name')
+    print(color.GREEN + '6. ' + color.GRAY + 'Update driver name by DNI')
 
-    prompt = input('Type your option: ')
+    prompt = input(color.GRAY + 'Type your option: ' + color.YELLOW)
+
     if prompt == '1':
         print(prompt)
     elif prompt == '2':
@@ -34,11 +43,16 @@ def start_app():
         print(prompt)
     else:
         clear()
-        print('ERROR: Select a valid option')
-        print('-----------------------------------------------------------------')
+        print(color.RED + 'ERROR: Select a valid option')
+        print(color.GRAY + '-----------------------------------------------------------------')
         start_app()
 
 if __name__ == '__main__':
+    
     clear()
-    create_tables()
-    start_app()
+
+    if create_tables():
+        start_app()
+    else:
+        print(color.RED + 'ERROR: Could not connect to database')
+
