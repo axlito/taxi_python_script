@@ -121,6 +121,22 @@ def find_taxi_by_driver_name(nombre_completo: str):
             print(f'Chapa => {chapa[0]}')
         else:
             print('Driver not found :(')
+        cursor.close()
+    except sqlite3.Error as error:
+        print(error)
+    finally:
+        if connection:
+            connection.close()
+
+
+def update_driver_name_by_dni(dni: str, nombre_completo: str):
+    connection = sqlite3.connect("taxis_db.sqlite")
+    cursor = connection.cursor()
+    try:
+        cursor.execute(''' UPDATE drivers SET nombre_completo = ? WHERE carnet = ?''', (nombre_completo, dni))
+        connection.commit()
+        cursor.close()
+        print('Driver updated!')
     except sqlite3.Error as error:
         print(error)
     finally:
