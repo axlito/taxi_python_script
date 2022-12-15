@@ -19,6 +19,19 @@ def clear():
     elif os_name == 'Windows':
         os.system('cls')
 
+
+def insert_driver_function():
+    clear()
+    print(color.GREEN + 'Adding new driver:')
+    dni = input(color.GRAY + 'Type the driver DNI: ' + color.YELLOW)
+    if dni:
+        name = input(color.GRAY + 'Type the driver name: ' + color.YELLOW)
+        if name:
+            last_name = input(color.GRAY + 'Type the driver last name: ' + color.YELLOW)
+            if last_name:
+                return insert_driver(carnet=dni, nombre=name, apellido=last_name)
+
+
 def start_app():
     print(color.GREEN + '1. ' + color.GRAY + 'Insert driver')
     print(color.GREEN + '2. ' + color.GRAY + 'Insert taxi')
@@ -26,11 +39,16 @@ def start_app():
     print(color.GREEN + '4. ' + color.GRAY + 'Show tais with more than 200km')
     print(color.GREEN + '5. ' + color.GRAY + 'Find taxi by driver name')
     print(color.GREEN + '6. ' + color.GRAY + 'Update driver name by DNI')
+    print(color.GRAY + '-----------------------------------------------------------------')
 
-    prompt = input(color.GRAY + 'Type your option: ' + color.YELLOW)
+    prompt = input(color.GRAY + ' Type your option: ' + color.YELLOW)
 
     if prompt == '1':
-        print(prompt)
+        if insert_driver_function():
+            clear()
+            print(color.GREEN + 'Driver added successfully')
+            print(color.GRAY + '-----------------------------------------------------------------')
+            start_app()
     elif prompt == '2':
         print(prompt)
     elif prompt == '3':

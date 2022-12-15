@@ -9,14 +9,15 @@ def create_tables():
         drivers_table = """CREATE TABLE IF NOT EXISTS drivers (
                             driver_id TEXT PRIMARY KEY UNIQUE,
                             carnet TEXT NOT NULL,
-                            nombre_completo TEXT NOT NULL UNIQUE,
-                            edad INTEGER NOT NULL
+                            nombre TEXT NOT NULL,
+                            apellido TEXT NOT NULL
                         );"""
         cursor.execute(drivers_table)
         taxis_table = """CREATE TABLE IF NOT EXISTS taxis (
                     taxi_id TEXT PRIMARY KEY UNIQUE,
                     chapa TEXT NOT NULL,
-                    recorrido INTEGER NOT NULL,
+                    modelo TEXT NOT NULL,
+                    km_recorrido INTEGER NOT NULL,
                     driver_id TEXT UNIQUE,
                     FOREIGN KEY (driver_id)
                         REFERENCES drivers (driver_id)
@@ -33,12 +34,12 @@ def create_tables():
             connection.close()
 
 
-def insert_driver(carnet: str, nombre_completo: str, edad: int):
+def insert_driver(carnet: str, nombre: str, apellido:str):
     connection = sqlite3.connect("taxis_db.sqlite")
     cursor = connection.cursor()
     try:
-        sql = ''' INSERT INTO drivers(driver_id,carnet,nombre_completo,edad) VALUES(?,?,?,?); '''
-        cursor.execute(sql, (uuid_v4(), carnet, nombre_completo, edad))
+        sql = ''' INSERT INTO drivers(driver_id, carnet, nombre, apellido) VALUES(?,?,?,?); '''
+        cursor.execute(sql, (uuid_v4(), carnet, nombre, apellido))
         connection.commit()
         cursor.close()
         return True
