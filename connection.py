@@ -51,26 +51,41 @@ def insert_driver(carnet: str, nombre: str, apellido:str):
             connection.close()
 
 
-def insert_taxi(chapa: str, recorrido: int, nombre_completo: str):
+def insert_taxi(chapa: str, modelo:str, km_recorrido:int, driver:str):
     connection = sqlite3.connect("taxis_db.sqlite")
     cursor = connection.cursor()
     try:
-        cursor.execute('''SELECT driver_id FROM drivers where nombre_completo like ?''', ('%' + nombre_completo + '%',))
-        row = cursor.fetchone()
-        if row[0]:
-            sql = ''' INSERT INTO taxis(taxi_id,chapa,recorrido,driver_id) VALUES(?,?,?,?); '''
-            cursor.execute(sql, (uuid_v4(), chapa, recorrido, row[0]))
-            connection.commit()
-            cursor.close()
-            return True
-        else:
-            return False
+        sql = ''' INSERT INTO taxis(taxi_id, chapa, modelo, km_recorrido, driver_id) VALUES(?,?,?,?,?); '''
+        cursor.execute(sql, (uuid_v4(), chapa, modelo, km_recorrido, driver))
+        connection.commit()
+        cursor.close()
+        return True
     except sqlite3.Error as error:
         print(error)
         return False
     finally:
         if connection:
             connection.close()
+
+
+def get_drivers():
+    connection = sqlite3.connect("taxis_db.sqlite")
+    cursor = connection.cursor()
+    list = []
+    try:
+        cursor.execute('''SELECT * FROM drivers''')
+        rows = cursor.fetchall()
+        for row in rows:
+            list.append(row)
+        cursor.close()
+        return list
+    except sqlite3.Error as error:
+        print(error)
+        return False
+    finally:
+        if connection:
+            connection.close()
+
 
 
 def show_drivers():
