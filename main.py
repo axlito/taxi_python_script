@@ -1,4 +1,5 @@
-from connection import create_tables, insert_driver, insert_taxi, show_drivers, show_taxis_with_more_than_200_km
+from connection import create_tables, insert_driver, insert_taxi, show_drivers, show_taxis_with_more_than_200_km, \
+    find_taxi_by_driver_name
 
 if __name__ == '__main__':
     create_tables()
@@ -6,3 +7,4 @@ if __name__ == '__main__':
     # insert_taxi('P987456', 250, 'Cristhiam')
     # show_drivers()
     # show_taxis_with_more_than_200_km()
+    # find_taxi_by_driver_name('Yohan')

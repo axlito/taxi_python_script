@@ -109,5 +109,24 @@ def show_taxis_with_more_than_200_km():
             connection.close()
 
 
+def find_taxi_by_driver_name(nombre_completo: str):
+    connection = sqlite3.connect("taxis_db.sqlite")
+    cursor = connection.cursor()
+    try:
+        cursor.execute('''SELECT driver_id FROM drivers where nombre_completo like ?''', ('%' + nombre_completo + '%',))
+        row = cursor.fetchone()
+        if row[0]:
+            cursor.execute(''' Select chapa from taxis where driver_id = ?''', (row[0],))
+            chapa = cursor.fetchone()
+            print(f'Chapa => {chapa[0]}')
+        else:
+            print('Driver not found :(')
+    except sqlite3.Error as error:
+        print(error)
+    finally:
+        if connection:
+            connection.close()
+
+
 def uuid_v4():
     return uuid.uuid4().hex
