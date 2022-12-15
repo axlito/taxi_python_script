@@ -61,5 +61,20 @@ def insert_taxi(chapa: str, recorrido: int, nombre_completo: str):
             connection.close()
 
 
+def show_drivers():
+    try:
+        cursor = connection.cursor()
+        cursor.execute('''SELECT * FROM drivers''')
+        rows = cursor.fetchall()
+        for row in rows:
+            print(f'{row[2]}, DNI: {row[1]}, Edad: {row[3]}\n')
+        cursor.close()
+    except sqlite3.Error as error:
+        print(error)
+    finally:
+        if connection:
+            connection.close()
+
+
 def uuid_v4():
     return uuid.uuid4().hex
