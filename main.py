@@ -1,8 +1,4 @@
-import sqlite3
+from connection import create_tables
 
-# connection = sqlite3.connect("taxi.db")
-
-# cursor = connection.cursor()
-
-var = input("Please enter something: ")
-print("You entered: " + var)
+if __name__ == '__main__':
+    create_tables()
