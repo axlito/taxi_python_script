@@ -24,8 +24,10 @@ def create_tables():
                 );"""
         cursor.execute(taxis_table)
         cursor.close()
+        return True
     except sqlite3.Error as error:
         print(error)
+        return False
     finally:
         if connection:
             connection.close()
@@ -38,10 +40,11 @@ def insert_driver(carnet: str, nombre_completo: str, edad: int):
         sql = ''' INSERT INTO drivers(driver_id,carnet,nombre_completo,edad) VALUES(?,?,?,?); '''
         cursor.execute(sql, (uuid_v4(), carnet, nombre_completo, edad))
         connection.commit()
-        print("Driver inserted successfully into drivers table")
         cursor.close()
+        return True
     except sqlite3.Error as error:
         print(error)
+        return False
     finally:
         if connection:
             connection.close()
@@ -57,12 +60,13 @@ def insert_taxi(chapa: str, recorrido: int, nombre_completo: str):
             sql = ''' INSERT INTO taxis(taxi_id,chapa,recorrido,driver_id) VALUES(?,?,?,?); '''
             cursor.execute(sql, (uuid_v4(), chapa, recorrido, row[0]))
             connection.commit()
-            print("Taxi inserted successfully into taxis table")
             cursor.close()
+            return True
         else:
-            print('Driver not found :(')
+            return False
     except sqlite3.Error as error:
         print(error)
+        return False
     finally:
         if connection:
             connection.close()
@@ -77,11 +81,13 @@ def show_drivers():
         if len(rows) > 0:
             for row in rows:
                 print(f'> {row[2]}, DNI: {row[1]}, Edad: {row[3]}\n')
+            cursor.close()
+            return True
         else:
-            print('No drivers stored :(')
-        cursor.close()
+            return False
     except sqlite3.Error as error:
         print(error)
+        return False
     finally:
         if connection:
             connection.close()
@@ -99,11 +105,13 @@ def show_taxis_with_more_than_200_km():
         if len(rows) > 0:
             for row in rows:
                 print(f'> {row[1]}, Recorrido: {row[2]}Km, Chofer: {row[6]}\n')
+            cursor.close()
+            return True
         else:
-            print('No taxis stored with more than 200km :(')
-        cursor.close()
+            return False
     except sqlite3.Error as error:
         print(error)
+        return False
     finally:
         if connection:
             connection.close()
@@ -119,11 +127,13 @@ def find_taxi_by_driver_name(nombre_completo: str):
             cursor.execute(''' Select chapa from taxis where driver_id = ?''', (row[0],))
             chapa = cursor.fetchone()
             print(f'Chapa => {chapa[0]}')
+            cursor.close()
+            return True
         else:
-            print('Driver not found :(')
-        cursor.close()
+            return False
     except sqlite3.Error as error:
         print(error)
+        return False
     finally:
         if connection:
             connection.close()
@@ -136,9 +146,10 @@ def update_driver_name_by_dni(dni: str, nombre_completo: str):
         cursor.execute(''' UPDATE drivers SET nombre_completo = ? WHERE carnet = ?''', (nombre_completo, dni))
         connection.commit()
         cursor.close()
-        print('Driver updated!')
+        return True
     except sqlite3.Error as error:
         print(error)
+        return False
     finally:
         if connection:
             connection.close()
