@@ -86,7 +86,7 @@ def get_drivers():
         if connection:
             connection.close()
 
-# ! TODO NOt working
+
 def show_taxis_with_more_than_200_km():
     connection = sqlite3.connect("taxis_db.sqlite")
     cursor = connection.cursor()
@@ -96,7 +96,6 @@ def show_taxis_with_more_than_200_km():
                         where km_recorrido > 200 
                         ''')
         rows = cursor.fetchall()
-        print(rows)
         for row in rows:
             list.append(row)
         cursor.close()
@@ -129,11 +128,11 @@ def find_taxi_by_driver_name(nombre: str, apellido: str):
             connection.close()
 
 
-def update_driver_name_by_dni(dni: str, nombre_completo: str):
+def update_driver_name_by_dni(dni: str, nombre: str, apellido: str):
     connection = sqlite3.connect("taxis_db.sqlite")
     cursor = connection.cursor()
     try:
-        cursor.execute(''' UPDATE drivers SET nombre_completo = ? WHERE carnet = ?''', (nombre_completo, dni))
+        cursor.execute(''' UPDATE drivers SET nombre = ?, apellido = ? WHERE carnet = ?''', (nombre, apellido, dni))
         connection.commit()
         cursor.close()
         return True

@@ -62,15 +62,15 @@ def show_drivers_function():
     for driver in drivers:
         print(color.GREEN + ' DNI: ' + color.WHITE + driver[1] + color.GREEN + ' Full Name: ' + color.WHITE + driver[2] + ' ' + driver[3])
 
-# ! Not Working
+
 def show_taxis_200km_function():
     taxis = show_taxis_with_more_than_200_km()
     print(color.BLUE + ' Taxis with more than 200km list')
     print(color.GRAY + '-----------------------------------------------------------------')
     for taxi in taxis:
-        print(color.GREEN + 'DNI: ' + color.WHITE + taxi)
+        print(color.GREEN + 'Plate: ' + color.WHITE + taxi[1] + color.GREEN + 'Model:  ' + color.WHITE + taxi[2] + color.GREEN + 'Kilometers: ' + color.WHITE + str(taxi[3]))
 
-# TODO
+
 def find_taxi_by_driver_function():
     clear()
     print(color.BLUE + ' Find taxi by driver name:')
@@ -81,12 +81,24 @@ def find_taxi_by_driver_function():
         if last_name:
             if find_taxi_by_driver_name(name, last_name):
                 taxi = find_taxi_by_driver_name(name, last_name)
-                print(taxi)
+                clear()
                 print(color.GREEN + ' Plate: ' + color.WHITE + taxi[1] + color.GREEN + ' Model: ' + color.WHITE + taxi[2] + color.GREEN + ' Kilometers: ' + color.WHITE + str(taxi[3]) + color.GREEN + ' Driver: ' + color.WHITE + name + ' ' + last_name)
                 return True
             else:
                 return False
 
+
+def update_driver_by_dni_function():
+    clear()
+    print(color.BLUE + ' Update driver by dni:')
+    print(color.GRAY + '-----------------------------------------------------------------')
+    dni = input(color.GRAY + ' Type the driver dni: ' + color.YELLOW)
+    if dni:
+        name = input(color.GRAY + ' Type the new driver name: ' + color.YELLOW)
+        if name:
+            last_name = input(color.GRAY + ' Type the new driver last name: ' + color.YELLOW)
+            if last_name:
+                return update_driver_name_by_dni(dni, name, last_name)
 
 
 def start_app():
@@ -124,17 +136,25 @@ def start_app():
         show_drivers_function()
         start_app()
     elif prompt == '4':
+        clear()
         show_taxis_200km_function()
+        start_app()
     elif prompt == '5':
         if find_taxi_by_driver_function():
-            clear()
             start_app()
         else:
             clear()
             print(color.RED + ' ERROR: The driver does not exist')
             start_app()
     elif prompt == '6':
-        print(prompt)
+        if update_driver_by_dni_function():
+            clear()
+            print(color.GREEN + ' DONE: Driver name updated successfully')
+            start_app()
+        else:
+            clear()
+            print(color.RED + ' ERROR: The driver dni does not exist')
+            start_app()
     else:
         clear()
         print(color.RED + ' ERROR: Select a valid option')
