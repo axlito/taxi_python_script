@@ -1,5 +1,4 @@
-from connection import create_tables, insert_driver, insert_taxi, get_drivers, show_taxis_with_more_than_200_km, \
-    find_taxi_by_driver_name, update_driver_name_by_dni
+from connection import create_tables, insert_driver, insert_taxi, get_drivers, show_taxis_with_more_than_200_km, find_taxi_by_driver_name, update_driver_name_by_dni
 import os, platform
 
 
@@ -52,16 +51,42 @@ def insert_taxi_function():
                 name = input(color.GRAY + '  Type the number corresponding to the taxi driver name: ' + color.YELLOW)
                 if name:
                     pos = int(name) - 1
-                    uuid = drivers[pos][1]
+                    uuid = drivers[pos][0]
                     return insert_taxi(chapa=plate, modelo=model, km_recorrido=kilometers, driver=uuid)
 
 
 def show_drivers_function():
     drivers = get_drivers()
-    print(color.BLUE + ' Drivers List')
+    print(color.BLUE + ' Drivers list')
     print(color.GRAY + '-----------------------------------------------------------------')
     for driver in drivers:
-        print(color.GREEN + 'DNI: ' + color.WHITE + driver[1] + color.GREEN + ' Full Name: ' + color.WHITE + driver[2] + ' ' + driver[3])
+        print(color.GREEN + ' DNI: ' + color.WHITE + driver[1] + color.GREEN + ' Full Name: ' + color.WHITE + driver[2] + ' ' + driver[3])
+
+# ! Not Working
+def show_taxis_200km_function():
+    taxis = show_taxis_with_more_than_200_km()
+    print(color.BLUE + ' Taxis with more than 200km list')
+    print(color.GRAY + '-----------------------------------------------------------------')
+    for taxi in taxis:
+        print(color.GREEN + 'DNI: ' + color.WHITE + taxi)
+
+# TODO
+def find_taxi_by_driver_function():
+    clear()
+    print(color.BLUE + ' Find taxi by driver name:')
+    print(color.GRAY + '-----------------------------------------------------------------')
+    name = input(color.GRAY + ' Type the driver name: ' + color.YELLOW)
+    if name:
+        last_name = input(color.GRAY + ' Type the driver last name: ' + color.YELLOW)
+        if last_name:
+            if find_taxi_by_driver_name(name, last_name):
+                taxi = find_taxi_by_driver_name(name, last_name)
+                print(taxi)
+                print(color.GREEN + ' Plate: ' + color.WHITE + taxi[1] + color.GREEN + ' Model: ' + color.WHITE + taxi[2] + color.GREEN + ' Kilometers: ' + color.WHITE + str(taxi[3]) + color.GREEN + ' Driver: ' + color.WHITE + name + ' ' + last_name)
+                return True
+            else:
+                return False
+
 
 
 def start_app():
@@ -99,9 +124,15 @@ def start_app():
         show_drivers_function()
         start_app()
     elif prompt == '4':
-        print(prompt)
+        show_taxis_200km_function()
     elif prompt == '5':
-        print(prompt)
+        if find_taxi_by_driver_function():
+            clear()
+            start_app()
+        else:
+            clear()
+            print(color.RED + ' ERROR: The driver does not exist')
+            start_app()
     elif prompt == '6':
         print(prompt)
     else:

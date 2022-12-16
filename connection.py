@@ -86,45 +86,21 @@ def get_drivers():
         if connection:
             connection.close()
 
-
-
-def show_drivers():
-    connection = sqlite3.connect("taxis_db.sqlite")
-    cursor = connection.cursor()
-    try:
-        cursor.execute('''SELECT * FROM drivers''')
-        rows = cursor.fetchall()
-        if len(rows) > 0:
-            for row in rows:
-                print(f'> {row[2]}, DNI: {row[1]}, Edad: {row[3]}\n')
-            cursor.close()
-            return True
-        else:
-            return False
-    except sqlite3.Error as error:
-        print(error)
-        return False
-    finally:
-        if connection:
-            connection.close()
-
-
+# ! TODO NOt working
 def show_taxis_with_more_than_200_km():
     connection = sqlite3.connect("taxis_db.sqlite")
     cursor = connection.cursor()
+    list = []
     try:
         cursor.execute('''SELECT * FROM taxis 
-                        inner join drivers d on d.driver_id = taxis.driver_id 
-                        where recorrido > 200 
+                        where km_recorrido > 200 
                         ''')
         rows = cursor.fetchall()
-        if len(rows) > 0:
-            for row in rows:
-                print(f'> {row[1]}, Recorrido: {row[2]}Km, Chofer: {row[6]}\n')
-            cursor.close()
-            return True
-        else:
-            return False
+        print(rows)
+        for row in rows:
+            list.append(row)
+        cursor.close()
+        return list
     except sqlite3.Error as error:
         print(error)
         return False
@@ -133,22 +109,20 @@ def show_taxis_with_more_than_200_km():
             connection.close()
 
 
-def find_taxi_by_driver_name(nombre_completo: str):
+def find_taxi_by_driver_name(nombre: str, apellido: str):
     connection = sqlite3.connect("taxis_db.sqlite")
     cursor = connection.cursor()
     try:
-        cursor.execute('''SELECT driver_id FROM drivers where nombre_completo like ?''', ('%' + nombre_completo + '%',))
+        cursor.execute('''SELECT driver_id FROM drivers where nombre = ? and apellido = ?''', (nombre, apellido))
         row = cursor.fetchone()
-        if row[0]:
-            cursor.execute(''' Select chapa from taxis where driver_id = ?''', (row[0],))
-            chapa = cursor.fetchone()
-            print(f'Chapa => {chapa[0]}')
+        if row is not None:
+            cursor.execute('''Select * from taxis where driver_id = ?''', (row[0],))
+            taxi = cursor.fetchone()
             cursor.close()
-            return True
+            return taxi
         else:
             return False
     except sqlite3.Error as error:
-        print(error)
         return False
     finally:
         if connection:
