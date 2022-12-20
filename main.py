@@ -68,7 +68,7 @@ def show_taxis_200km_function():
     print(color.BLUE + ' Taxis with more than 200km list')
     print(color.GRAY + '-----------------------------------------------------------------')
     for taxi in taxis:
-        print(color.GREEN + 'Plate: ' + color.WHITE + taxi[1] + color.GREEN + 'Model:  ' + color.WHITE + taxi[2] + color.GREEN + 'Kilometers: ' + color.WHITE + str(taxi[3]))
+        print(color.GREEN + ' Plate: ' + color.WHITE + taxi[1] + color.GREEN + ' Model:  ' + color.WHITE + taxi[2] + color.GREEN + ' Kilometers: ' + color.WHITE + str(taxi[3]))
 
 
 def find_taxi_by_driver_function():

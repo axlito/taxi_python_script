@@ -71,14 +71,11 @@ def insert_taxi(chapa: str, modelo:str, km_recorrido:int, driver:str):
 def get_drivers():
     connection = sqlite3.connect("taxis_db.sqlite")
     cursor = connection.cursor()
-    list = []
     try:
         cursor.execute('''SELECT * FROM drivers''')
         rows = cursor.fetchall()
-        for row in rows:
-            list.append(row)
         cursor.close()
-        return list
+        return rows
     except sqlite3.Error as error:
         print(error)
         return False
@@ -90,16 +87,11 @@ def get_drivers():
 def show_taxis_with_more_than_200_km():
     connection = sqlite3.connect("taxis_db.sqlite")
     cursor = connection.cursor()
-    list = []
     try:
-        cursor.execute('''SELECT * FROM taxis 
-                        where km_recorrido > 200 
-                        ''')
+        cursor.execute('''SELECT * FROM taxis where km_recorrido > 200''')
         rows = cursor.fetchall()
-        for row in rows:
-            list.append(row)
         cursor.close()
-        return list
+        return rows
     except sqlite3.Error as error:
         print(error)
         return False
@@ -107,12 +99,12 @@ def show_taxis_with_more_than_200_km():
         if connection:
             connection.close()
 
-
+# TODO Inner Join
 def find_taxi_by_driver_name(nombre: str, apellido: str):
     connection = sqlite3.connect("taxis_db.sqlite")
     cursor = connection.cursor()
     try:
-        cursor.execute('''SELECT driver_id FROM drivers where nombre = ? and apellido = ?''', (nombre, apellido))
+        cursor.execute('''SELECT driver_id FROM drivers where nombre like ? or apellido like ?''', ('%' + nombre + '%', '%' + apellido + '%'))
         row = cursor.fetchone()
         if row is not None:
             cursor.execute('''Select * from taxis where driver_id = ?''', (row[0],))
@@ -127,7 +119,7 @@ def find_taxi_by_driver_name(nombre: str, apellido: str):
         if connection:
             connection.close()
 
-
+# TODO Fix Error Handling
 def update_driver_name_by_dni(dni: str, nombre: str, apellido: str):
     connection = sqlite3.connect("taxis_db.sqlite")
     cursor = connection.cursor()
